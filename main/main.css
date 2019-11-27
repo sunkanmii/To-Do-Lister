@@ -1,0 +1,25 @@
+*{
+    box-sizing: border-box;
+}
+header, section, footer, aside, nav, main, article, figure{
+    display: block;
+}
+body{
+    font-family: Arial, Helvetica, sans-serif;
+}
+#app-title{
+    display: inline-block;
+    text-align: center;
+    font-size: 50px;
+    width: 100%;
+}
+main #PNoti{
+    display: inline-block;
+    width: 140px;
+    height: 60px;
+    font-size: 15px;
+    text-align: center;
+    color: white;
+    background-color: lightskyblue;
+}
+
