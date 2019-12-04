@@ -15,3 +15,23 @@ navigator.serviceWorker.register('/service-worker.js')
 })
 
 navigator.serviceWorker.register('/service-worker.js', {scope: '/'});
+
+let worker = new Worker('custom-webworker.js');
+
+//Console methods
+const laptops = [
+    {
+        name: "Dell"    
+    },
+    {
+        name: "Hp"
+    },
+    {
+        name: "Acer"
+    },
+    {
+        name: "Apple"
+    }
+];
+
+console.table(laptops);

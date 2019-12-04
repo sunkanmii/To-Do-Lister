@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Sign up and Login Page</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+</head>
+<body>
+    <main>
+
+        <h1>Sign Up Form</h1>
+        
+        <h2>Signing up.</h2>
+        <form>
+            <label for="full-name">Full name(First and Last name):</label>
+            <input aria-required="true" id="full-name" type="text" name="fullname"/>
+            <br/>
+
+            <label for="email" aria-required="true">Email:</label>
+            <input aria-required="true" id="email" type="text" name="email"/>
+            <br/>
+
+            <label for="course">Course of study:</label>
+            <select aria-required="true" id="course">
+                <option>Computer Science</option>
+                <option>Mathematics</option>
+                <option>Botany</option>
+                <option>Actuarial Science</option>
+                <option>Chemistry</option>
+            </select>
+            <br/>
+
+            <label for="search">Search</label>
+            <input id="search" type="search"/> 
+            <br/>
+
+            <label for="institution">Institution:</label>
+            <select aria-required="true" id="institution">
+                <option>University of Lagos</option>
+                <option>Lead City</option>
+                <option>Convenant University</option>
+                <option>University of Ibadan</option>
+                <option>University of Lagos</option>
+            </select>
+            <br/>
+
+            <label for="years">Year:</label>
+            <br/>
+            <p id ="year-description">
+                Please note that a maximum of 5 years is the default year system for this
+                form. 
+            </p>
+            <select  aria-required="true" aria-describedby="year-description" id="years">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+            </select>
+            <br/>
+
+            <button aria-label="Sign up"><submit>Sign up</submit></button>
+        </form>
+    </main>
+    <script src='main.js'></script>
+</body>
+</html>

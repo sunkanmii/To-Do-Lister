@@ -1,5 +1,5 @@
 const cacheVersion = 'version 2';
-const cacheFiles = ['/main/index.html', '/main/main.css', '/main/main.js', '/main/push.js'];
+const cacheFiles = ['/app/index.html', '/app/main.css', '/app/main.js', '/app/push.js'];
 
 self.addEventListener('install', event => {
     event.waitUntil(
@@ -22,9 +22,9 @@ self.registration.showNotification('Title 1', {
         icon: '/imgs/apple-touch-icon.png'
     }],
     body: 'body text',
-    badge: '/img/apple-touch-icon.png',
-    icon: '/img/apple-touch-icon.png',
-    image: '/img/apple-touch-icon.png',
+    badge: '/imgs/apple-touch-icon.png',
+    icon: '/imgs/apple-touch-icon.png',
+    image: '/imgs/apple-touch-icon.png',
     //tag: "foo",
     //Makes every notificaion regardless of the tag to notify or 
     //make a sound or buzz  
