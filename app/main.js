@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 let weekDates = document.getElementById("dateWeeks");
 
 // function displayWeeks(){
@@ -111,7 +111,6 @@ console.log(title.startsWith("Sunkanmi"));
 // Side - Octal values begin with the letter 0 followed by 
 // the letter o;
 
-
 // Template Literals (or string template with interpolated variables 
 // and expressions)
   
@@ -125,7 +124,7 @@ function processInvoice(segments, ...values) {
     console.log(segments);
     console.log(values);
 }
-
+ 
 let invoiceNum = '1350';
 let amount = '2000';
 
@@ -140,7 +139,7 @@ var invoice = {
     //When using arrow functions, the value of the 'this' keyword does
     //change.
 
-    process: function(){
+    process: function() {
         return () => console.log(this.number);
     }
 };
@@ -152,4 +151,8 @@ var newInvoice = {
 invoice.process().bind(newInvoice)();
 
 // for...of loop
-String j[]p; = new String[3];
+let names = [ "Sunkanmi", "Precious" ];
+
+for(var item in names){
+    console.log(item);
+}

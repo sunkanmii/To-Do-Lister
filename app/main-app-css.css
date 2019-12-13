@@ -1,0 +1,9 @@
+*{
+    box-sizing: border-box;
+}
+header, section, footer, aside, nav, main, article, figure{
+    display: block;
+}
+main p{
+    font-size: 20px;
+}

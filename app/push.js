@@ -1,5 +1,5 @@
 //Push is just about making data to go from one
-//some messaging server down to the user's device.
+//messaging server down to the user's device.
 
 //Steps
 //1 - Configure push
