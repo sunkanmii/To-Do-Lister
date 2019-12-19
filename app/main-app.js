@@ -14,16 +14,16 @@ if (typeof (Storage) == "undefined") {
 
 create_new_task_button.addEventListener("click", () => {
     const user_inputs = `
-    <section class="tasks-created"> 
+    <section class="tasks-created">
     <span class="important-marker">&#9733;</span> <input class="level-of-importance" type="number"/> 
     <p class="LOR-error-message"></p>
     <!--
         An icon should be here.
     -->
-    <button aria-label="delete task" class="delete-task" onclick="DeleteTask()">Delete task</button>
+    <button aria-label="delete task" class="delete-task" onclick="DeleteTask(this)">Delete task</button>
     
     <input aria-label="Please enter your task" type = "text" class="user-todo" placeholder="Please input your task"/>
-    <input type = "checkbox" class="checkbox-tasks-done" onclick="IncreasePercentage()"/>
+    <input type = "checkbox" class="checkbox-tasks-done" onclick="CompleteTask(this)"/>
     <sunkanmii-progress-circle><span aria-label="progress">0</span>%</sunkanmii-progress-circle>
     
     <section>
@@ -32,19 +32,16 @@ create_new_task_button.addEventListener("click", () => {
     </section>
 
     <section class="subtasks">
-    <button class="done-button" onclick="SaveTask()">Done</button>
+    <button class="done-button" onclick="SaveTask(this)">Done</button>
         or
-    <button class="add-subtask-button" onclick="AddSubtask()">Add subtask</button> 
+    <button class="add-subtask-button" onclick="AddSubtask(this)">Add subtask</button>
     </section>
     </section>`;
 
+    user_tasks.insertAdjacentHTML("beforeend", user_inputs);
+
     user_tasks = document.querySelector("#user-tasks");
-
-    user_tasks.innerHTML += user_inputs;
-    AddSubtask();
-    DeleteTask();
     localStorage.setItem("user_tasks", JSON.stringify(user_tasks.innerHTML));
-
 });
 
 function DeleteTask() {
@@ -53,12 +50,10 @@ function DeleteTask() {
     for (let i = 0; i < delete_tasks.length; i++) {
         let element = delete_tasks[i];
         let childElement = user_tasks.children[i];
-
-        element.addEventListener("click", () => {
-            user_tasks.removeChild(childElement);
-        })
+        user_tasks.removeChild(childElement);
     }
-        localStorage.setItem("user_tasks", JSON.stringify(user_tasks.innerHTML));
+
+    localStorage.setItem("user_tasks", JSON.stringify(document.querySelector("#user-tasks").innerHTML));
 }
 
 function DeleteSubTask() {
@@ -73,7 +68,7 @@ function DeleteSubTask() {
         })
     }
 
-    localStorage.removeItem("user_tasks");
+    localStorage.clear();
     localStorage.setItem("user_tasks", JSON.stringify(document.querySelector("#user-tasks").innerHTML));
 }
 
@@ -86,7 +81,7 @@ function AddSubtask() {
         <button aria-label="delete task" class="delete-task">Delete subtask</button>
     
         <input aria-label="Please enter your task" type = "text" class="user-todo" placeholder="Please input your task"/>
-        <input type = "checkbox" class="checkbox-subtasks"/>
+        <input type = "checkbox" onclick="CompleteSubtask(this)"/>
         <sunkanmii-progress-circle><span aria-label="progress">0</span>%</sunkanmii-progress-circle>
         
         <section>
@@ -94,77 +89,108 @@ function AddSubtask() {
             <input aria-labelledby="stop-time-label" class="custom-time" type="time">
         </section>
             
-            <section>
-                <button class="done-button">Done</button> 
-            </section>
+        <section>
+            <button class="done-button">Done</button> 
+        </section>
     </section>
             `
     let subtaskButtons = document.querySelectorAll(".add-subtask-button");
 
     for (let i = 0; i < subtaskButtons.length; i++) {
-        let element = subtaskButtons[i];
-
-        element.addEventListener("click", () => {
-            subtask += subtaskButtons[i].parentNode.innerHTML;
-            subtaskButtons[i].parentNode.innerHTML = subtask;
-        })
+        subtask += subtaskButtons[i].parentNode.innerHTML;
+        subtaskButtons[i].parentNode.innerHTML = subtask;
     }
 
-    localStorage.removeItem("user_tasks");
+    localStorage.clear();
     localStorage.setItem("user_tasks", JSON.stringify(document.querySelector("#user-tasks").innerHTML));
 }
 
-function IncreasePercentage() {
-    let progressCheckboxs = document.querySelectorAll(".checkbox-tasks-done");
-    let progressNums = document.querySelectorAll(".tasks-created sunkanmii-progress-circle span");
+function CompleteTask(element) {
+    let progressNum = element.parentNode.children[6].children[0];
+    const subtaskParentNode = element.parentNode.children[8]; //subtasks class node.
+    let subtaskChildren = subtaskParentNode.children; //All children in subtasks node.
+    const subtaskChildrenLen = subtaskChildren.length;
 
-    if (document.querySelectorAll(".checkbox-subtasks").length != 0) {
-        let userSubtasks = document.querySelectorAll(".subtasks");
-        let checkboxSubtasks = document.querySelectorAll(".checkbox-subtasks");
-        let subtasksProgressNums = document.querySelectorAll(".user-subtask sunkanmii-progress-circle span");
+    if (element.checked === true) {
+        progressNum.innerHTML = 100;
+        if (subtaskChildren.length != 2) {
 
-        for (let i = 0; i < progressCheckboxs.length; i++) {
-
-            if (userSubtasks[i].children.length == 2) {
-                progressNums[i].innerHTML = "100";
-            } else {
-                progressNums[i].innerHTML = "100";
-
-                for (let j = 0; j < userSubtasks[i].children.length - 2; j++) {
-                    checkboxSubtasks[j].checked = true;
-                    subtasksProgressNums[j].innerHTML = "100";
+            for (let i = 0; i < (subtaskChildrenLen - 2); i++) {
+                for (let j = 0; j < 1; j++) {
+                    subtaskChildren[i].children[2].checked = true;
+                    subtaskChildren[i].children[3].children[0].innerHTML = 100;
                 }
             }
         }
     } else {
-        for (let i = 0; i < progressCheckboxs.length; i++) {
-            if (progressCheckboxs[i].checked == true) {
-                progressNums[i].innerHTML = 100;
-            } else {
-                progressCheckboxs[i].checked = true;
-                progressNums[i].innerHTML = 0;
+        progressNum.innerHTML = 0;
+
+        if (subtaskChildren.length != 2) {
+
+            for (let i = 0; i < subtaskChildrenLen - 2; i++) {
+                for (let j = 0; j < 1; j++) {
+                    subtaskChildren[i].children[2].checked = false;
+                    subtaskChildren[i].children[3].children[0].innerHTML = 0;
+                }
             }
         }
     }
+
+    localStorage.setItem("user_tasks", JSON.stringify(user_tasks.innerHTML));
 }
 
-function SaveTask() {
-    let levelOfRelevance = document.querySelectorAll(".level-of-importance");
-    let levelOfRelevanceErrMsg = document.querySelectorAll(".LOR-error-message");
-    let levelOfRelevanceVal = 0;
+function CompleteSubtask(element){
+    const subtaskParentNode = element.parentNode;
+    const subtaskAncestor = element.parentNode.parentNode.parentNode;
+    const mainTaskCheckbox = subtaskAncestor.children[5];
+    const allSubtasksLen = subtaskAncestor.children[8].children.length - 2;
+    let subtaskCompletionQuota = 100 / allSubtasksLen;
     
-    let i = 0;
-    let LORLen = levelOfRelevance.length;
-    let LORErrMsgLen = levelOfRelevanceErrMsg.length;
-    try{
-        for(let i = 0; i < LORLen; i++){
-            levelOfRelevanceVal = levelOfRelevance[i].innerHTML;
-        }
+    const mainTaskCompletionPercentNode = subtaskAncestor.children[6].children[0];
+    let mainTaskCompletionPercent = Number(mainTaskCompletionPercentNode.textContent);
+    
+    if(element.checked === true){
+        mainTaskCompletionPercent += subtaskCompletionQuota;
+        subtaskParentNode.children[3].children[0].innerHTML = subtaskCompletionQuota.toPrecision(3);
+        mainTaskCompletionPercentNode.innerHTML = mainTaskCompletionPercent.toPrecision(3);
     }
-    catch(err){
-        for(let i = 0; i < LORErrMsgLen; i++){
-            levelOfRelevanceErrMsg[i].innerHTML = `Error: ${err}`; 
-        }    
+    else{
+        mainTaskCompletionPercent -= subtaskCompletionQuota;
+        subtaskParentNode.children[3].children[0].innerHTML = 0;
+        mainTaskCompletionPercentNode.innerHTML = mainTaskCompletionPercent.toPrecision(3);
     }
+
+    if(Number(mainTaskCompletionPercentNode.innerHTML) === 100) {
+        mainTaskCheckbox.checked = true;
+    }
+
+    localStorage.setItem("user_tasks", JSON.stringify(user_tasks.innerHTML));
 }
 
+function SaveTask(element) {
+    let taskParentNode = element.parentNode.parentNode;
+    let errorMessageNode = taskParentNode.children[2];
+    let levelOfRelevanceNode = taskParentNode.children[1];
+    let levelOfRelevanceVal = levelOfRelevanceNode.value;
+    const userTaskNode = taskParentNode.children[4];
+    const userTaskValue = userTaskNode.value;
+  
+    const levelOfRelevanceValElement = document.createElement("p");
+    const lvlOfRelNode = document.createTextNode(levelOfRelevanceVal);
+    levelOfRelevanceValElement.appendChild(lvlOfRelNode);
+
+    try {
+        if (levelOfRelevanceVal === "" || userTaskValue === ""
+            ) {
+            throw new Error("Parameter cannot be empty.");
+        }
+        levelOfRelevanceNode.disabled = "true";
+        levelOfRelevanceNode.style.backgroundColor = "white";
+
+        levelOfRelevanceNode.style.border = "none";
+    } catch (err) {
+        errorMessageNode.textContent = `${err}`;
+    }
+
+    localStorage.setItem("user_tasks", JSON.stringify(user_tasks.innerHTML));
+}

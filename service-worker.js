@@ -1,7 +1,7 @@
-const cacheVersion = 'version 2';
-const cacheFiles = ['/app/index.html', '/app/main.css', '/app/main.js', '/app/push.js'];
+const cacheVersion = "version 2";
+const cacheFiles = ["/app/index.html", "/app/main.css", "/app/main.js", "/app/push.js"];
 
-self.addEventListener('install', event => {
+self.addEventListener("install", event => {
     event.waitUntil(
         caches.open(cacheVersion).then(cache => {
             cache.addAll(cacheFiles);

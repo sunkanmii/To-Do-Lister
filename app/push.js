@@ -1,3 +1,4 @@
+"use strict";
 //Push is just about making data to go from one
 //messaging server down to the user's device.
 
