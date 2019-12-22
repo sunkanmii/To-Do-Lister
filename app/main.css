@@ -23,4 +23,12 @@ main #PNoti{
     background-color: lightskyblue;
 }
 
+/**
+    CSS media queries device breakpoints.
+    320px - Phones.
+    480px / 600px - Small tablets.
+    768px - Laptops.
+    1200px - Large screens.
+**/
+
 

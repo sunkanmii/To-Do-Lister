@@ -1,7 +1,7 @@
 {
-    "name": "Student Organizer Application",
+    "name": "To-do Application",
     "short_name": "SO app", 
-    "start_url": "/main/index.html",
+    "start_url": "/main/main-app.html",
     "background_color": "#3498DD",
     "theme_color": "#34495F",
     "orientation": "any",
@@ -21,7 +21,7 @@
     ],
     "dir": "ltr",
     "lang": "en-US",
-    "description": "This application is designed to help students organise their courses, make todos and organise your activites for the day.",
+    "description": "This application is designed to help students organise their courses, and manage their time and activites for the day.",
     "scope": "/",
     "screenshots": [{
         "src": ""

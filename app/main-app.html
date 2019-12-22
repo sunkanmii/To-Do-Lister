@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,20 +9,37 @@
 </head>
 <body>
     <header>
-        <h2>My tasks</h2>
+        <side-bar></side-bar>
+        <nav class="main-navigation" aria-label="site">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="login-signup.html">Sign Up</a></li>
+                <li><a href="support.html">Support</a></li>
+            </ul>
+        </nav>
     </header>
-
+    
     <main>
-        <section>
-            <h2 id="goal-tag">Goal: </h2>
+        <section class="goal-section">
+            <h1 id="goal-tag">Goal: </h1>
             <input type="text" /> 
         </section>
-        <sunkanmii-progress-circle></sunkanmii-progress-circle>
+
+        <h2>My tasks</h2>
+        
         <section id="user-tasks">
         </section>
+        
         <button id="create-new-task" aria-label="create new task"><span id="add-symbol">&#x2795;</span> Create new task </button>
-
     </main>
+
+    <footer>
+        <p>Copyright &copy; 2016, All rights reserved.</p>
+        <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam, reiciendis.
+        </p>
+    </footer>
+
     <script src="main-app.js"></script>
     <script src="elements.js"></script>
 </body>

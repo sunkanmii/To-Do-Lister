@@ -3,10 +3,8 @@
 
 const create_new_task_button = document.querySelector("#create-new-task");
 let user_tasks = document.querySelector("#user-tasks");
-let tasks_list = "";
-let delete_tasks = "";
 
-if (typeof (Storage) == "undefined") {
+if (typeof (Storage) === "undefined") {
     console.log("Storage not supported");
 } else if (localStorage.getItem("user_tasks") != null) {
     user_tasks.innerHTML = JSON.parse(localStorage.getItem("user_tasks"));
@@ -15,7 +13,10 @@ if (typeof (Storage) == "undefined") {
 create_new_task_button.addEventListener("click", () => {
     const user_inputs = `
     <section class="tasks-created">
-    <span class="important-marker">&#9733;</span> <input class="level-of-importance" type="number"/> 
+    <section class="priority-level-section">
+        <button aria-label="Priority marker" class="important-marker" onclick="ChangeColor(this)">&#9733;</button> <input class="priority-level" type="number" disabled/> 
+    </section>
+    
     <p class="LOR-error-message"></p>
     <!--
         An icon should be here.
@@ -23,18 +24,21 @@ create_new_task_button.addEventListener("click", () => {
     <button aria-label="delete task" class="delete-task" onclick="DeleteTask(this)">Delete task</button>
     
     <input aria-label="Please enter your task" type = "text" class="user-todo" placeholder="Please input your task"/>
-    <input type = "checkbox" class="checkbox-tasks-done" onclick="CompleteTask(this)"/>
-    <sunkanmii-progress-circle><span aria-label="progress">0</span>%</sunkanmii-progress-circle>
     
-    <section>
+    <section class="complete-task">
+        <input type = "checkbox" class="checkbox-tasks-done" onclick="CompleteTask(this)" disabled/>
+        <sunkanmii-progress-circle><span aria-label="progress">0</span>%</sunkanmii-progress-circle>
+    </section>
+
+    <section class="stop-time">
         <label class="stop-time-label">Stop Time:</label>
         <input aria-labelledby="stop-time-label" class="custom-time" type="time">
     </section>
 
-    <section class="subtasks">
-    <button class="done-button" onclick="SaveTask(this)">Done</button>
-        or
-    <button class="add-subtask-button" onclick="AddSubtask(this)">Add subtask</button>
+    <section class="subtask">
+        <button class="done-button" onclick="SaveTask(this)">Done</button>
+            or
+        <button class="add-subtask-button" onclick="AddSubtask(this)">Add subtask</button>
     </section>
     </section>`;
 
@@ -44,65 +48,66 @@ create_new_task_button.addEventListener("click", () => {
     localStorage.setItem("user_tasks", JSON.stringify(user_tasks.innerHTML));
 });
 
-function DeleteTask() {
-    delete_tasks = document.querySelectorAll(".delete-task");
-
-    for (let i = 0; i < delete_tasks.length; i++) {
-        let element = delete_tasks[i];
-        let childElement = user_tasks.children[i];
-        user_tasks.removeChild(childElement);
+function ChangeColor(element){
+    if(element.hasAttribute("disabled")){
+        element.style.color = "black";
+        element.removeAttribute("disabled");
     }
-
-    localStorage.setItem("user_tasks", JSON.stringify(document.querySelector("#user-tasks").innerHTML));
+    else{
+        element.style.color = "white";
+        element.disabled = true;
+    }
 }
 
-function DeleteSubTask() {
-    delete_tasks = document.querySelectorAll(".delete-sub-task");
+function DeleteTask(element) {
+    const userTaskParentNode = element.parentNode.parentNode;
+    const userTaskNode = element.parentNode;
 
-    for (let i = 0; i < delete_tasks.length; i++) {
-        let element = delete_tasks[i];
-        let childElement = user_tasks.children[i];
-        let parentElement = delete_tasks.parentNode.parentNode;
-        element.addEventListener("click", () => {
-            user_tasks.removeChild(childElement);
-        })
-    }
-
+    userTaskParentNode.removeChild(userTaskNode);
+    
     localStorage.clear();
-    localStorage.setItem("user_tasks", JSON.stringify(document.querySelector("#user-tasks").innerHTML));
+    localStorage.setItem("user_tasks", JSON.stringify(user_tasks.innerHTML));
 }
 
-function AddSubtask() {
+function DeleteSubTask(element) {
+    const userSubTaskParentNode = element.parentNode.parentNode;
+    const userSubTaskNode = element.parentNode;
+
+    userSubTaskParentNode.removeChild(userSubTaskNode);
+        
+    localStorage.clear();
+    localStorage.setItem("user_tasks", JSON.stringify(user_tasks.innerHTML));
+}
+
+function AddSubtask(element) {
     let subtask = `    
     <section class="user-subtask">
         <!--
         An icon should be here.
         -->
-        <button aria-label="delete task" class="delete-task">Delete subtask</button>
-    
+        <button aria-label="delete task" class="delete-task" onclick="DeleteSubTask(this)">Delete subtask</button>
+
         <input aria-label="Please enter your task" type = "text" class="user-todo" placeholder="Please input your task"/>
-        <input type = "checkbox" onclick="CompleteSubtask(this)"/>
+        <input type = "checkbox" onclick="CompleteSubtask(this)" disabled/>
         <sunkanmii-progress-circle><span aria-label="progress">0</span>%</sunkanmii-progress-circle>
         
         <section>
             <label class="stop-time-label">Stop Time:</label>
             <input aria-labelledby="stop-time-label" class="custom-time" type="time">
+            <time></time>
         </section>
             
         <section>
-            <button class="done-button">Done</button> 
+            <button class="done-button" onclick="SaveSubTask(this)">Done</button> 
         </section>
     </section>
             `
-    let subtaskButtons = document.querySelectorAll(".add-subtask-button");
+    const userSubTaskParentNode = element.parentNode;
 
-    for (let i = 0; i < subtaskButtons.length; i++) {
-        subtask += subtaskButtons[i].parentNode.innerHTML;
-        subtaskButtons[i].parentNode.innerHTML = subtask;
-    }
+    userSubTaskParentNode.insertAdjacentHTML("beforebegin", subtask);
 
     localStorage.clear();
-    localStorage.setItem("user_tasks", JSON.stringify(document.querySelector("#user-tasks").innerHTML));
+    localStorage.setItem("user_tasks", JSON.stringify(user_tasks.innerHTML));
 }
 
 function CompleteTask(element) {
@@ -112,25 +117,25 @@ function CompleteTask(element) {
     const subtaskChildrenLen = subtaskChildren.length;
 
     if (element.checked === true) {
-        progressNum.innerHTML = 100;
+        progressNum.textContent = 100;
         if (subtaskChildren.length != 2) {
 
             for (let i = 0; i < (subtaskChildrenLen - 2); i++) {
                 for (let j = 0; j < 1; j++) {
                     subtaskChildren[i].children[2].checked = true;
-                    subtaskChildren[i].children[3].children[0].innerHTML = 100;
+                    subtaskChildren[i].children[3].children[0].textContent = 100;
                 }
             }
         }
     } else {
-        progressNum.innerHTML = 0;
+        progressNum.textContent = 0;
 
         if (subtaskChildren.length != 2) {
 
             for (let i = 0; i < subtaskChildrenLen - 2; i++) {
                 for (let j = 0; j < 1; j++) {
                     subtaskChildren[i].children[2].checked = false;
-                    subtaskChildren[i].children[3].children[0].innerHTML = 0;
+                    subtaskChildren[i].children[3].children[0].textContent = 0;
                 }
             }
         }
@@ -156,7 +161,7 @@ function CompleteSubtask(element){
     }
     else{
         mainTaskCompletionPercent -= subtaskCompletionQuota;
-        subtaskParentNode.children[3].children[0].innerHTML = 0;
+        subtaskParentNode.children[3].children[0].textContent = 0;
         mainTaskCompletionPercentNode.innerHTML = mainTaskCompletionPercent.toPrecision(3);
     }
 
@@ -168,26 +173,93 @@ function CompleteSubtask(element){
 }
 
 function SaveTask(element) {
-    let taskParentNode = element.parentNode.parentNode;
-    let errorMessageNode = taskParentNode.children[2];
-    let levelOfRelevanceNode = taskParentNode.children[1];
-    let levelOfRelevanceVal = levelOfRelevanceNode.value;
+    const taskParentNode = element.parentNode.parentNode;
+    const errorMessageNode = taskParentNode.children[2];
+    const levelOfRelevanceNode = taskParentNode.children[1];
+    const levelOfRelevanceValue = levelOfRelevanceNode.value;
     const userTaskNode = taskParentNode.children[4];
     const userTaskValue = userTaskNode.value;
-  
-    const levelOfRelevanceValElement = document.createElement("p");
-    const lvlOfRelNode = document.createTextNode(levelOfRelevanceVal);
-    levelOfRelevanceValElement.appendChild(lvlOfRelNode);
+    const stopTimeNode = taskParentNode.children[7].children[1];
+    const stopTimeValue = stopTimeNode.value;
+    const completeTaskCheckBox = taskParentNode.children[5];
 
     try {
-        if (levelOfRelevanceVal === "" || userTaskValue === ""
-            ) {
+        if (levelOfRelevanceValue === "" || userTaskValue === "" || stopTimeValue === "") {
+            throw new InvalidArgumentException("Input cannot be empty.");
+        }
+        else if(element.textContent === "Edit"){
+            levelOfRelevanceNode.removeAttribute("disabled");
+            levelOfRelevanceNode.style.border = "2px solid rgb(238, 238, 238)";
+            
+            userTaskNode.removeAttribute("disabled");
+            userTaskNode.style.border = "2px solid rgb(238, 238, 238)";
+            
+            stopTimeNode.removeAttribute("disabled");
+            stopTimeNode.style.border = "2px solid rgb(238, 238, 238)";
+            
+            completeTaskCheckBox.disabled = true;
+            
+            element.textContent = "Done";
+        }
+        else{
+            levelOfRelevanceNode.disabled = true;
+            levelOfRelevanceNode.value = levelOfRelevanceValue; //To save user's value in localStorage
+            levelOfRelevanceNode.style.border = "none";
+            
+            userTaskNode.disabled = true;
+            userTaskNode.value = userTaskValue;
+            userTaskNode.style.border = "none";
+            
+            stopTimeNode.disabled = true;
+            stopTimeNode.value = stopTimeNode.value;
+            stopTimeNode.style.border = "none";
+            
+            completeTaskCheckBox.removeAttribute("disabled");
+
+            element.textContent = "Edit";
+        }
+    } catch (err) {
+        errorMessageNode.textContent = `${err}`;
+    }
+
+    localStorage.setItem("user_tasks", JSON.stringify(user_tasks.innerHTML));
+}
+
+function SaveSubTask(element) {
+    const subTaskParentNode = element.parentNode.parentNode;
+    const errorMessageNode = subTaskParentNode.children[2];
+    const userSubTaskNode = subTaskParentNode.children[1];
+    const userSubTaskValue = userSubTaskNode.value;
+    const stopTimeNode = subTaskParentNode.children[4].children[1];
+    const stopTimeValue = stopTimeNode.value;
+    const completeSubTaskCheckBox = subTaskParentNode.children[2];
+
+    try {
+        if (userSubTaskValue === "" || stopTimeValue === "") {
             throw new Error("Parameter cannot be empty.");
         }
-        levelOfRelevanceNode.disabled = "true";
-        levelOfRelevanceNode.style.backgroundColor = "white";
+        else if(element.textContent === "Edit"){
+            userSubTaskNode.removeAttribute("disabled");
+            userSubTaskNode.style.border = "2px solid rgb(238, 238, 238)";
+            
+            stopTimeNode.removeAttribute("disabled");
+            stopTimeNode.style.border = "2px solid rgb(238, 238, 238)";
+            
+            completeSubTaskCheckBox.disabled = true;
 
-        levelOfRelevanceNode.style.border = "none";
+            element.textContent = "Done";
+        }
+        else{
+            userSubTaskNode.disabled = true;
+            userSubTaskNode.style.border = "none";
+            
+            stopTimeNode.disabled = true;
+            stopTimeNode.style.border = "none";
+            
+            completeSubTaskCheckBox.removeAttribute("disabled");
+            
+            element.textContent = "Edit";
+        }
     } catch (err) {
         errorMessageNode.textContent = `${err}`;
     }
