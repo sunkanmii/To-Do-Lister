@@ -12,6 +12,7 @@ if (typeof (Storage) === "undefined") {
 
 create_new_task_button.addEventListener("click", () => {
     const user_inputs = `
+    <hr/>
     <section class="tasks-created">
     <section class="priority-level-section">
         <button aria-label="Priority marker" class="important-marker" onclick="ChangeColor(this)">&#9733;</button> <input class="priority-level" type="number" disabled/> 
@@ -40,7 +41,8 @@ create_new_task_button.addEventListener("click", () => {
             or
         <button class="add-subtask-button" onclick="AddSubtask(this)">Add subtask</button>
     </section>
-    </section>`;
+    </section>
+    `;
 
     user_tasks.insertAdjacentHTML("beforeend", user_inputs);
 
@@ -49,13 +51,16 @@ create_new_task_button.addEventListener("click", () => {
 });
 
 function ChangeColor(element){
-    if(element.hasAttribute("disabled")){
+    const priorityButtonParentNode = element.parentNode;
+    const priorityLvlNode = priorityButtonParentNode.children[1];
+
+    if(priorityLvlNode.hasAttribute("disabled")){
         element.style.color = "black";
-        element.removeAttribute("disabled");
+        priorityLvlNode.removeAttribute("disabled");
     }
     else{
         element.style.color = "white";
-        element.disabled = true;
+        priorityLvlNode.disabled = true;
     }
 }
 
@@ -88,9 +93,12 @@ function AddSubtask(element) {
         <button aria-label="delete task" class="delete-task" onclick="DeleteSubTask(this)">Delete subtask</button>
 
         <input aria-label="Please enter your task" type = "text" class="user-todo" placeholder="Please input your task"/>
-        <input type = "checkbox" onclick="CompleteSubtask(this)" disabled/>
-        <sunkanmii-progress-circle><span aria-label="progress">0</span>%</sunkanmii-progress-circle>
         
+        <section class="complete-subtask">
+            <input type = "checkbox" onclick="CompleteSubtask(this)" disabled/>
+            <sunkanmii-progress-circle><span aria-label="progress">0</span>%</sunkanmii-progress-circle>
+        </section>
+
         <section>
             <label class="stop-time-label">Stop Time:</label>
             <input aria-labelledby="stop-time-label" class="custom-time" type="time">
@@ -111,8 +119,8 @@ function AddSubtask(element) {
 }
 
 function CompleteTask(element) {
-    let progressNum = element.parentNode.children[6].children[0];
-    const subtaskParentNode = element.parentNode.children[8]; //subtasks class node.
+    let progressNum = element.parentNode.children[1].children[0];
+    const subtaskParentNode = element.parentNode.parentNode.children[6]; //subtasks class node.
     let subtaskChildren = subtaskParentNode.children; //All children in subtasks node.
     const subtaskChildrenLen = subtaskChildren.length;
 
@@ -174,20 +182,22 @@ function CompleteSubtask(element){
 
 function SaveTask(element) {
     const taskParentNode = element.parentNode.parentNode;
-    const errorMessageNode = taskParentNode.children[2];
-    const levelOfRelevanceNode = taskParentNode.children[1];
+    const errorMessageNode = taskParentNode.children[1];
+    const levelOfRelevanceNode = taskParentNode.children[0].children[1];
     const levelOfRelevanceValue = levelOfRelevanceNode.value;
-    const userTaskNode = taskParentNode.children[4];
+    const userTaskNode = taskParentNode.children[3];
     const userTaskValue = userTaskNode.value;
-    const stopTimeNode = taskParentNode.children[7].children[1];
+    const stopTimeNode = taskParentNode.children[5].children[1];
     const stopTimeValue = stopTimeNode.value;
-    const completeTaskCheckBox = taskParentNode.children[5];
+    const completeTaskCheckBox = taskParentNode.children[4].children[0];
 
     try {
-        if (levelOfRelevanceValue === "" || userTaskValue === "" || stopTimeValue === "") {
+        if (userTaskValue === "" || stopTimeValue === "") {
             throw new InvalidArgumentException("Input cannot be empty.");
         }
         else if(element.textContent === "Edit"){
+            errorMessageNode.style.display = "none";
+
             levelOfRelevanceNode.removeAttribute("disabled");
             levelOfRelevanceNode.style.border = "2px solid rgb(238, 238, 238)";
             
@@ -202,6 +212,8 @@ function SaveTask(element) {
             element.textContent = "Done";
         }
         else{
+            errorMessageNode.style.display = "none";
+
             levelOfRelevanceNode.disabled = true;
             levelOfRelevanceNode.value = levelOfRelevanceValue; //To save user's value in localStorage
             levelOfRelevanceNode.style.border = "none";
@@ -219,6 +231,7 @@ function SaveTask(element) {
             element.textContent = "Edit";
         }
     } catch (err) {
+        errorMessageNode.style.display = "block";
         errorMessageNode.textContent = `${err}`;
     }
 

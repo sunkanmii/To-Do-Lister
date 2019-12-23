@@ -26,29 +26,45 @@ main {
 main .goal-section{
     margin-bottom: 30px;
 }
-
 main .goal-section #goal-tag{
     display: inline-block;
     width: 20%;
 }
+main .goal-section ~ hr {
+    margin: auto;
+    margin-bottom: 20px;
+    background-color: cadetblue;
+    height: 2px;
+    width: 100%;
+    border: none;
+}
+
 main input[type="text"]{
     width: 70%;
 }
-main #user-tasks {
+#user-tasks {
     display: grid;
     grid-template-columns: repeat(1, auto);
     grid-template-rows: repeat(1, auto);
     grid-gap: 15px;
     margin-bottom: 10px;
 }
-
-main #user-tasks .tasks-created {
+#user-tasks hr:nth-child(1){
+    display: none;
+}
+#user-tasks hr{
+    border: none;
+    background-color: lightgreen;
+    width: 150px;
+    height: 2px;
+}
+#user-tasks .tasks-created, #user-tasks .user-subtask {
     display: grid;
     grid-template-columns: 51px auto auto; /**or auto auto auto**/
     grid-template-rows: 30px auto auto 30px;
     row-gap: 10px;
 }
-.tasks-created .delete-task{
+.tasks-created .delete-task, .user-subtask .delete-task{
     grid-area: 1 / 2 / 2 / 4;
     justify-self: center;
     align-self: center;
@@ -59,12 +75,12 @@ main #user-tasks .tasks-created {
 .tasks-created .priority-level-section {
     grid-area: 2 / 1 / 3 / 2;
 }
-.tasks-created .user-todo {
+.tasks-created .user-todo, .user-subtask .user-todo{
     grid-area: 2 / 2 / 3 / 3;
     width: 100%;
     height: 25px;
 }
-.tasks-created .complete-task {
+.tasks-created .complete-task, .user-subtask .complete-subtask{
     justify-self: center;
     grid-area: 2 / 3 / 3 / 4;
 }
@@ -81,6 +97,10 @@ main #user-tasks .tasks-created {
 .tasks-created .LOR-error-message {
     display: none;
 }
+
+#user-tasks .user-subtask{
+    padding-left: 10px;
+} 
 footer {
     display: flex;
     justify-content: center;
