@@ -1,7 +1,7 @@
 {
     "name": "Student Organizer Application",
     "short_name": "SO app", 
-    "start_url": "index.html",
+    "start_url": "/app/index.html",
     "background_color": "#3498DD",
     "theme_color": "#34495F",
     "orientation": "any",

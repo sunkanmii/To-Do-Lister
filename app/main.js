@@ -1,14 +1,21 @@
 "use strict";
-if(!('serviceWorker' in navigator)){
-    console.log('sw not supported.');
+if ('serviceWorker' in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./service-worker.js")
+        .then(registration => {
+            console.log("SW successfully registered: ", registration);
+        })
+        .catch(err => {
+            console.log("Error: ", err);
+        });
+    });
 }
-navigator.serviceWorker.register('/service-worker.js')
-.then(function(registration){
-    console.log('SW registered! Scope is:', registration.scope);
-}).catch((err) => {
-    console.log("Error :", err);
-})
+else{
+    console.log("service worker not supported.");
+}
 
-navigator.serviceWorker.register('/service-worker.js', {scope: '/'});
+navigator.serviceWorker.register('/service-worker.js', {
+    scope: '/'
+});
 
 let worker = new Worker('custom-webworker.js');
