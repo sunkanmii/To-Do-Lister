@@ -58,13 +58,28 @@ main input[type="text"]{
     width: 150px;
     height: 2px;
 }
-#user-tasks .tasks-created, #user-tasks .user-subtask {
+#user-tasks .tasks-created {
     display: grid;
-    grid-template-columns: 51px auto auto; /**or auto auto auto**/
-    grid-template-rows: 30px auto auto 30px;
-    row-gap: 10px;
+    grid-template-columns: 51px auto auto;
+    grid-template-rows: 30px auto auto auto;
+    grid-row-gap: 10px;
 }
-.tasks-created .delete-task, .user-subtask .delete-task{
+#user-tasks .user-subtask{
+    grid-column: 1 / 4;
+}
+.user-subtask{
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    grid-template-rows: repeat(3, auto);
+    row-gap: 5px;
+}
+
+#user-tasks .user-subtask{
+    grid-column: 2 / 4; 
+    padding-left: 10px;
+} 
+
+.tasks-created .delete-task, .user-subtask .delete-subtask{
     grid-area: 1 / 2 / 2 / 4;
     justify-self: center;
     align-self: center;
@@ -72,6 +87,7 @@ main input[type="text"]{
     margin-left: 30px;
     width: 50%;
 }
+
 .tasks-created .priority-level-section {
     grid-area: 2 / 1 / 3 / 2;
 }
@@ -84,11 +100,11 @@ main input[type="text"]{
     justify-self: center;
     grid-area: 2 / 3 / 3 / 4;
 }
-.tasks-created .stop-time{
+.tasks-created .stop-time, .user-subtask .stop-time{
     grid-area: 3 / 2 / 4 / 4; 
 }
-.tasks-created .subtask {
-    grid-area: 4 / 1 / 5 / 3;
+.tasks-created .subtask, .user-subtask .save-subtask{
+    grid-column: 1 / 3; 
     align-self: center;
 }
 .tasks-created .priority-level{
@@ -97,10 +113,6 @@ main input[type="text"]{
 .tasks-created .LOR-error-message {
     display: none;
 }
-
-#user-tasks .user-subtask{
-    padding-left: 10px;
-} 
 footer {
     display: flex;
     justify-content: center;
