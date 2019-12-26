@@ -1,6 +1,8 @@
 //main app
 "use strict";
 
+const goal_tag = document.querySelector("#goal-tag");
+const goal_input = document.querySelector("#goal-input");
 const create_new_task_button = document.querySelector("#create-new-task");
 const user_tasks = document.querySelector("#user-tasks");
 
@@ -43,14 +45,14 @@ const completeSubTasksDict = DictVals().makeDict();
 
 if (typeof (Storage) === "undefined") {
     console.log("Storage not supported");
-} else if (localStorage.getItem("user_tasks") != null) {
+} else if (localStorage.getItem("user_tasks") !== null || localStorage.getItem("user-goal") !== null) {
     user_tasks.innerHTML = JSON.parse(localStorage.getItem("user_tasks"));
+    goal_input.value = JSON.parse(localStorage.getItem("user-goal"));
     DisplayUserValues();
 }
 
 create_new_task_button.addEventListener("click", () => {
     const user_inputs = `
-    <hr/>
     <section class="tasks-created">
     <section class="priority-level-section">
         <button aria-label="Priority marker" class="important-marker" onclick="ChangeColor(this)">&#9733;</button> <input class="priority-level" type="number" disabled/> 
@@ -87,6 +89,18 @@ create_new_task_button.addEventListener("click", () => {
     localStorage.setItem("user_tasks", JSON.stringify(user_tasks.innerHTML));
 });
 
+function SaveGoal(element){
+    if(element.textContent === "Save"){
+        element.textContent = "Edit";
+        localStorage.setItem("user-goal", JSON.stringify(goal_input.value));
+        goal_input.disabled = true;
+    }
+    else{
+        element.textContent = "Save";
+        goal_input.removeAttribute("disabled");
+    }
+}
+
 function ChangeColor(element) {
     const priorityButtonParentNode = element.parentNode;
     const priorityLvlNode = priorityButtonParentNode.children[1];
@@ -106,7 +120,7 @@ function DeleteTask(element) {
 
     userTaskParentNode.removeChild(userTaskNode);
 
-    localStorage.clear();
+    localStorage.removeItem("user_tasks");
 
     localStorage.setItem("user_tasks", JSON.stringify(user_tasks.innerHTML));
 }
@@ -117,8 +131,8 @@ function DeleteSubTask(element) {
 
     userSubTaskParentNode.removeChild(userSubTaskNode);
 
-    localStorage.clear();
-
+    localStorage.removeItem("user_tasks");
+    
     localStorage.setItem("user_tasks", JSON.stringify(user_tasks.innerHTML));
 }
 
@@ -296,6 +310,7 @@ function SaveTask(element) {
     localStorage.setItem("user_tasks_values", JSON.stringify(myTasksDict));
 }
 
+//Still in development.
 function SaveSubTask(element) {
     const subTaskParentNode = element.parentNode.parentNode;
     const errorMessageNode = subTaskParentNode.children[2];
@@ -353,20 +368,19 @@ function DisplayUserValues() {
         userSubTasksHTML.children[1].value = dictVals[1];
     } else if (localStorage.getItem("user_tasks_values") !== null) {
         const dictVals = JSON.parse(localStorage.getItem("user_tasks_values"))
-        const userTasksLen = user_tasks.childElementCount / 2;
+        const userTasksLen = user_tasks.childElementCount;
 
         let j = 0;
-        for (let i = 0; i <= userTasksLen; i+=2) {
-            let cusItr = i + 1;
+        for (let i = 0; i < userTasksLen; i++) {
             j++;
             //Priority level node
-            user_tasks.children[cusItr].children[0].children[1].value = Number(dictVals[j]);
+            user_tasks.children[i].children[0].children[1].value = Number(dictVals[j]);
             j++;
             //User task node
-            user_tasks.children[cusItr].children[3].value = dictVals[j];
+            user_tasks.children[i].children[3].value = dictVals[j];
             j++;
             //Stop time node
-            user_tasks.children[cusItr].children[5].children[1].value = dictVals[j];
+            user_tasks.children[i].children[5].children[1].value = dictVals[j];
         }
     }
 }

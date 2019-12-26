@@ -3,26 +3,25 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>To-do List</title>
+    <title>To-do Lister</title>
     <meta name='viewport' content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" type="text/css" media="screen" href="main-app-css.css">
 </head>
 <body>
     <header>
-        <side-bar></side-bar>
         <nav class="main-navigation" aria-label="site">
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li><a href="login-signup.html">Sign Up</a></li>
-                <li><a href="support.html">Support</a></li>
             </ul>
         </nav>
     </header>
     
     <main>
         <section class="goal-section">
-            <h1 id="goal-tag">Goal: </h1>
-            <input type="text" /> 
+            <label id="goal-tag" for="goal-input">Goal: </label>
+            <input type="text" id="goal-input"/>
+            <button aria-label="save" onclick="SaveGoal(this)">Save</button> 
         </section>
 
         <hr/>
@@ -36,10 +35,7 @@
     </main>
 
     <footer>
-        <p>Copyright &copy; 2016, All rights reserved.</p>
-        <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam, reiciendis.
-        </p>
+        <p>Copyright &copy; 2019, All rights reserved.</p>
     </footer>
 
     <script src="main-app.js"></script>

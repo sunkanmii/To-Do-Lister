@@ -1,23 +1,26 @@
 const cacheFiles = [
     "/",
-    "/app",
+    "/app/main-app.html",
+    "/app/main-app.js",
+    "/app/main-app-css.css",
     "/app/index.html",
     "/app/main.css",
     "/app/main.js",
     "/app/push.js"
 ];
 
-const staticCacheName = "cache 1";
+const staticCacheName = "cache 2";
 
 self.addEventListener("install", event => {
     self.skipWaiting();
-
+    
     event.waitUntil(
         caches.open(staticCacheName)
         .then(cache => {
             return cache.addAll(cacheFiles);
         })
-    );
+        );
+        
 });
 
 self.addEventListener("activate", event => {
@@ -26,39 +29,36 @@ self.addEventListener("activate", event => {
     const cacheWhitelist = [staticCacheName];
 
     event.waitUntil(
-      caches.keys().then(cacheNames => {
-        return Promise.all(
-          cacheNames.map(cacheName => {
-            if (cacheWhitelist.indexOf(cacheName) === -1) {
-              return caches.delete(cacheName);
-            }
-          })
-        );
-      })
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.map(cacheName => {
+                    if (cacheWhitelist.indexOf(cacheName) === -1) {
+                        return caches.delete(cacheName);
+                    }
+                })
+            );
+        })
     );
 });
 
 self.addEventListener("fetch", event => {
-    console.log("Service worker activating: ", event.request.url);
-
     event.respondWith(
         caches.match(event.request)
         .then(response => {
-            if(response){
-                console.log("Found ", event.request.url, " in cache");
+            if (response) {
                 return response;
             }
             console.log("Network request for ", event.request.url);
             return fetch(event.request)
-            .then(response => {
-                if(response.status === 404){
-                    
-                }
-                return caches.open(staticCacheName).then(cache => {
-                    cache.put(event.request.url, response.clone());
-                    return response;
+                .then(response => {
+                    if (response.status === 404) {
+
+                    }
+                    return caches.open(staticCacheName).then(cache => {
+                        cache.put(event.request.url, response.clone());
+                        return response;
+                    });
                 });
-            });
         })
         .catch(error => {
             console.log("Failed to retrieve files: ", error);
@@ -66,6 +66,7 @@ self.addEventListener("fetch", event => {
     );
 })
 
+//Stil in development.
 //Persistent notifications
 //self.registration.showNotification('Title 1', {
 //    actions: [{

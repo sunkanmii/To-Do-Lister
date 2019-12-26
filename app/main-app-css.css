@@ -24,11 +24,19 @@ main {
     font-family: Montserrat, Arial, Sans-Serif;
 }
 main .goal-section{
+    display: inline-block;
+    width: 100%;
     margin-bottom: 30px;
 }
 main .goal-section #goal-tag{
     display: inline-block;
+    font-weight: bold;
+    padding-top: 12px;
+    font-size: 1.58rem;
     width: 20%;
+}
+.goal-section button{
+    margin-top: 10px;
 }
 main .goal-section ~ hr {
     margin: auto;
@@ -112,6 +120,26 @@ main input[type="text"]{
 }
 .tasks-created .LOR-error-message {
     display: none;
+}
+@media only screen and (min-width: 640px){
+    main{
+        margin: auto;
+        width: 60%;
+    }
+}
+
+@media only screen and (min-width: 768px){
+    main{
+        margin: auto;
+        width: 40%;
+    }
+}
+
+@media only screen and (min-width: 1024px){
+    main{
+        margin: auto;
+        width: 30%;
+    }
 }
 footer {
     display: flex;
