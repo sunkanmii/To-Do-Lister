@@ -21,4 +21,3 @@ Be sure to check back later on this section, I will populate it soon.
 
 Thank you for reading this readme to this point, you are truly awesome 🙂. But, this app is still in development, feel free to make comments or suggests once you see something that needs improvement 😊.
 
-This app was created majorly with the resources from ALC(Andela Learning Community) 4.0 program in preparation for the Google certification exam.
