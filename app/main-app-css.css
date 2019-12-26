@@ -124,20 +124,19 @@ main input[type="text"]{
 @media only screen and (min-width: 640px){
     main{
         margin: auto;
+        margin-top: 30px;
         width: 60%;
     }
 }
 
 @media only screen and (min-width: 768px){
     main{
-        margin: auto;
         width: 40%;
     }
 }
 
 @media only screen and (min-width: 1024px){
     main{
-        margin: auto;
         width: 30%;
     }
 }
