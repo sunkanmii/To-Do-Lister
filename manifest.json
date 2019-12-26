@@ -1,7 +1,7 @@
 {
     "name": "T-D Lister",
     "short_name": "T-D Lister", 
-    "start_url": "/app/main-app.html",
+    "start_url": "app/main-app.html",
     "background_color": "#3498DD",
     "theme_color": "#34495F",
     "orientation": "any",
