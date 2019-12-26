@@ -1,6 +1,6 @@
 {
-    "name": "Student Organizer Application",
-    "short_name": "SO app", 
+    "name": "To-do Application",
+    "short_name": "To-do app", 
     "start_url": "/app/index.html",
     "background_color": "#3498DD",
     "theme_color": "#34495F",
