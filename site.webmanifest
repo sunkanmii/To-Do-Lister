@@ -1,6 +1,6 @@
 {
-    "name": "To-do Application",
-    "short_name": "To-do app", 
+    "name": "To-do Lister",
+    "short_name": "T-D Lister", 
     "start_url": "/app/index.html",
     "background_color": "#3498DD",
     "theme_color": "#34495F",

@@ -78,8 +78,8 @@ create_new_task_button.addEventListener("click", () => {
 
     <section class="subtask">
         <button class="done-button" onclick="SaveTask(this)">Done</button>
-            or
-        <button class="add-subtask-button" onclick="AddSubtask(this)">Add subtask</button>
+        <!--Still in development-->
+        <button class="add-subtask-button" onclick="AddSubtask(this)" style="display:none">Add subtask</button>
     </section>
     </section>
     `;
@@ -132,7 +132,7 @@ function DeleteSubTask(element) {
     userSubTaskParentNode.removeChild(userSubTaskNode);
 
     localStorage.removeItem("user_tasks");
-    
+
     localStorage.setItem("user_tasks", JSON.stringify(user_tasks.innerHTML));
 }
 
